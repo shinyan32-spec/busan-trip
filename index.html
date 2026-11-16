@@ -11,7 +11,7 @@
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen">
-    <!-- 頂部標題區 -->
+    <!-- 頂部標題與快捷字卡區 -->
     <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg sticky top-0 z-50">
         <div class="max-w-4xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
@@ -20,75 +20,30 @@
                 </h1>
                 <p class="text-blue-100 text-sm mt-1">11/28 (六) － 12/02 (三)</p>
             </div>
-            <div class="flex items-center gap-2">
-                <button onclick="toggleEditMode()" id="editBtn" class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg text-sm font-medium transition backdrop-blur-sm border border-white/30">
-                    ✏️ 開啟編輯模式
+            <!-- 頂部快捷字卡（含航班、住宿、收據） -->
+            <div class="flex flex-wrap items-center gap-1.5 justify-end">
+                <span class="text-xs text-blue-200 font-medium mr-1">🚖 快捷字卡：</span>
+                <button onclick="showTaxiCard('CI 190 去程航班', '11/28 (六) 台灣出發 ✈️ 釜山')" class="bg-white/20 hover:bg-white/30 text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition backdrop-blur-sm border border-white/30">
+                    ✈️ 去程 CI190
                 </button>
-                <button onclick="openShareModal()" class="bg-amber-400 hover:bg-amber-500 text-slate-900 px-4 py-2 rounded-lg text-sm font-bold transition shadow">
-                    📤 匯出 / LINE 分享
+                <button onclick="showTaxiCard('CI 187 回程航班', '12/02 (三) 19:50 釜山起飛 ✈️ 台灣')" class="bg-white/20 hover:bg-white/30 text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition backdrop-blur-sm border border-white/30">
+                    ✈️ 回程 CI187
+                </button>
+                <button onclick="showTaxiCard('브라운도트 비즈니스 서면점', 'Browndot Business Seomyeon (西面)')" class="bg-white/20 hover:bg-white/30 text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition backdrop-blur-sm border border-white/30">
+                    🏨 西面住宿
+                </button>
+                <button onclick="showTaxiCard('엘모멘토 광안', 'Elmomento Gwangalli (廣安里)')" class="bg-white/20 hover:bg-white/30 text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition backdrop-blur-sm border border-white/30">
+                    🏨 廣安住宿
+                </button>
+                <button onclick="showTaxiCard('영수증 주세요', 'Yeongsujeung juseyo (請給我收據)')" class="bg-amber-400 hover:bg-amber-500 text-slate-900 px-2.5 py-1.5 rounded-lg text-xs font-bold transition shadow">
+                    🧾 請給我收據
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- 航班與住宿資訊卡片區 -->
+    <!-- 主要內容區 -->
     <main class="max-w-4xl mx-auto px-4 py-6 space-y-6">
-        <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- 航班卡片 -->
-            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col justify-between">
-                <div>
-                    <h2 class="text-xs font-bold uppercase tracking-wider text-blue-600 mb-3 flex items-center gap-1">
-                        <span>✈️</span> 華航來回航班資訊
-                    </h2>
-                    <div class="space-y-3 text-sm">
-                        <div class="flex justify-between items-center bg-slate-50 p-2.5 rounded-xl">
-                            <div>
-                                <span class="font-bold text-slate-700">去程 CI 190</span>
-                                <div class="text-xs text-slate-500">11/28 (六) 台灣出發</div>
-                            </div>
-                            <span class="text-xs bg-blue-100 text-blue-700 font-semibold px-2.5 py-1 rounded-full">去釜山</span>
-                        </div>
-                        <div class="flex justify-between items-center bg-slate-50 p-2.5 rounded-xl">
-                            <div>
-                                <span class="font-bold text-slate-700">回程 CI 187</span>
-                                <div class="text-xs text-slate-500">12/02 (三) 19:50 釜山起飛</div>
-                            </div>
-                            <span class="text-xs bg-emerald-100 text-emerald-700 font-semibold px-2.5 py-1 rounded-full">返台</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 住宿卡片 -->
-            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col justify-between">
-                <div>
-                    <h2 class="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-3 flex items-center gap-1">
-                        <span>🏨</span> 住宿與計程車司機字卡
-                    </h2>
-                    <div class="space-y-3 text-sm">
-                        <div class="bg-slate-50 p-2.5 rounded-xl flex justify-between items-center">
-                            <div>
-                                <span class="text-xs font-semibold text-slate-400 block">Day 1 - 2 (11/28 - 30)</span>
-                                <span class="font-bold text-slate-700">Browndot Business Seomyeon</span>
-                            </div>
-                            <button onclick="showTaxiCard('브라운도트 비즈니스 서면점', 'Browndot Business Seomyeon')" class="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-bold px-3 py-1.5 rounded-lg transition">
-                                🚖 司機字卡
-                            </button>
-                        </div>
-                        <div class="bg-slate-50 p-2.5 rounded-xl flex justify-between items-center">
-                            <div>
-                                <span class="text-xs font-semibold text-slate-400 block">Day 3 - 4 (11/30 - 12/02)</span>
-                                <span class="font-bold text-slate-700">埃爾陌門托廣安公寓式飯店</span>
-                            </div>
-                            <button onclick="showTaxiCard('엘모멘토 광안', 'Elmomento Gwangalli')" class="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-bold px-3 py-1.5 rounded-lg transition">
-                                🚖 司機字卡
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- 日期導航標籤 -->
         <div class="flex overflow-x-auto gap-2 pb-2 scrollbar-none" id="dayTabs">
             <button onclick="switchDay(1)" class="day-tab px-4 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap transition bg-blue-600 text-white shadow" data-day="1">Day 1 (11/28)</button>
@@ -104,26 +59,13 @@
         </div>
     </main>
 
-    <!-- 司機大字卡 Modal -->
+    <!-- 司機 / 資訊大字卡 Modal -->
     <div id="taxiModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 text-center space-y-4 shadow-2xl">
-            <div class="text-xs uppercase font-bold tracking-wider text-indigo-600 bg-indigo-50 py-1 px-3 rounded-full inline-block">請向司機出示此畫面</div>
+            <div class="text-xs uppercase font-bold tracking-wider text-indigo-600 bg-indigo-50 py-1 px-3 rounded-full inline-block">請向司機 / 服務人員出示此畫面</div>
             <h3 id="taxiKorean" class="text-3xl font-black text-slate-900 tracking-tight py-4"></h3>
             <p id="taxiEnglish" class="text-slate-500 text-sm"></p>
             <button onclick="closeTaxiCard()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl transition">關閉</button>
-        </div>
-    </div>
-
-    <!-- 分享 Modal -->
-    <div id="shareModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
-            <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2"><span>📤</span> 匯出與分享行程</h3>
-            <p class="text-xs text-slate-500">點擊下方按鈕即可一鍵複製完整行程文字，直接貼到 LINE 群組與大家分享！</p>
-            <textarea id="shareTextOutput" class="w-full h-40 p-3 text-xs font-mono bg-slate-50 border border-slate-200 rounded-xl focus:outline-none" readonly></textarea>
-            <div class="flex gap-2">
-                <button onclick="copyShareText()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition text-sm">📋 複製純文字</button>
-                <button onclick="closeShareModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-3 rounded-xl transition text-sm">關閉</button>
-            </div>
         </div>
     </div>
 
@@ -132,15 +74,16 @@
         let itineraryData = {
             1: {
                 title: "西面商圈 ＋ 樂天百貨",
-                focus: "採買美妝日用品、百貨精品巡禮、烤肉與牛小腸宵夜",
+                focus: "採買美妝日用品、百貨精品巡禮、飯店 Check-in、烤肉與牛小腸宵夜",
                 items: [
-                    { time: "06:00", title: "台灣出發", desc: "預計上午抵達金海機場、前往西面放行李", query: "金海國際機場" },
+                    { time: "06:00", title: "台灣出發", desc: "預計上午抵達金海機場、前往西面", query: "金海國際機場" },
                     { time: "10:30 - 11:30", title: "西面商圈", desc: "DAISO 大創、Olive Young", query: "서면 다이소" },
                     { time: "11:30 - 12:30", title: "🍴 午餐：福雞屋", desc: "招牌水芹菜雞湯", query: "복닭집 서면" },
                     { time: "13:30 - 16:30", title: "樂天百貨 釜山本店", desc: "AMI Paris、Matin Kim、服飾及美妝", query: "롯데백화점 부산본점" },
-                    { time: "16:30 - 18:00", title: "西面商圈自由逛街", desc: "地下街、田浦咖啡街周邊", query: "서면 지하상가" },
+                    { time: "16:30 - 17:30", title: "🏨 飯店 Check-in：Browndot Business Seomyeon", desc: "辦理入住、放置行李與戰利品", query: "브라운도트 비즈니스 서면" },
+                    { time: "17:30 - 18:00", title: "西面商圈自由逛街", desc: "地下街、田浦咖啡街周邊", query: "서면 지하상가" },
                     { time: "18:00 - 19:30", title: "🍴 晚餐：83 獬豸", desc: "韓國烤肉名店（建議提前抽號碼牌）", query: "83해치 서면" },
-                    { time: "19:30 之後", title: "西面商圈自由活動", desc: "", query: "서면" },
+                    { time: "19:30 - 21:30", title: "西面商圈自由活動", desc: "", query: "서면" },
                     { time: "21:30 - 23:00", title: "🍴 宵夜：青春牛小腸 (청춘소곱창)", desc: "備選：서면곱（西面牛小腸）", query: "청춘소곱창 서면" }
                 ]
             },
@@ -188,7 +131,7 @@
                     { time: "16:00 - 17:30", title: "返回廣安里", desc: "", query: "광안리해수욕장" },
                     { time: "18:00 - 19:30", title: "🍴 晚餐：成元亭羊大腸", desc: "", query: "성원정양대창" },
                     { time: "19:30 - 21:00", title: "🍴 續攤：大蟹俱樂部", desc: "帝王蟹 / 松葉蟹大餐", query: "대게클럽" },
-                    { time: "21:00 之后", title: "廣安里海水浴場、廣安大橋夜景", desc: "散步消食、看大橋燈光秀", query: "광안대교 야경" }
+                    { time: "21:00 之後", title: "廣安里海水浴場、廣安大橋夜景", desc: "散步消食、看大橋燈光秀", query: "광안대교 야경" }
                 ]
             },
             5: {
@@ -209,7 +152,6 @@
         };
 
         let currentDay = 1;
-        let isEditMode = false;
 
         function switchDay(day) {
             currentDay = day;
@@ -238,18 +180,13 @@
                     <div class="space-y-4">
             `;
 
-            data.items.forEach((item, index) => {
+            data.items.forEach((item) => {
                 html += `
                     <div class="flex flex-col md:flex-row items-start md:items-center justify-between bg-slate-50 hover:bg-slate-100/70 p-4 rounded-xl transition gap-3 border border-slate-100/80">
                         <div class="w-full md:w-auto">
                             <span class="inline-block bg-blue-50 text-blue-700 font-bold text-xs px-2.5 py-1 rounded-lg mb-1">${item.time}</span>
-                            ${isEditMode ? `
-                                <input type="text" id="title-${currentDay}-${index}" value="${item.title}" class="font-bold text-slate-800 text-sm w-full bg-white border border-slate-300 rounded px-2 py-1 mt-1">
-                                <input type="text" id="desc-${currentDay}-${index}" value="${item.desc}" class="text-xs text-slate-600 w-full bg-white border border-slate-300 rounded px-2 py-1 mt-1">
-                            ` : `
-                                <h3 class="font-bold text-slate-800 text-sm">${item.title}</h3>
-                                ${item.desc ? `<p class="text-xs text-slate-500 mt-0.5">${item.desc}</p>` : ''}
-                            `}
+                            <h3 class="font-bold text-slate-800 text-sm">${item.title}</h3>
+                            ${item.desc ? `<p class="text-xs text-slate-500 mt-0.5">${item.desc}</p>` : ''}
                         </div>
                         <div class="flex items-center gap-2 self-end md:self-center">
                             ${item.query ? `
@@ -257,54 +194,13 @@
                                     <span>📍</span> Naver 地圖
                                 </a>
                             ` : ''}
-                            ${isEditMode ? `
-                                <button onclick="deleteItem(${currentDay}, ${index})" class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs px-3 py-2 rounded-lg transition">刪除</button>
-                            ` : ''}
                         </div>
                     </div>
                 `;
             });
 
-            if (isEditMode) {
-                html += `
-                    <button onclick="addItem(${currentDay})" class="w-full border-2 border-dashed border-slate-300 hover:border-blue-500 text-slate-500 hover:text-blue-600 font-bold text-sm py-3 rounded-xl transition mt-4">
-                        ＋ 新增行程
-                    </button>
-                `;
-            }
-
             html += `</div></div>`;
             container.innerHTML = html;
-        }
-
-        function toggleEditMode() {
-            if (isEditMode) {
-                // 儲存修改
-                const data = itineraryData[currentDay];
-                data.items.forEach((item, index) => {
-                    const titleInput = document.getElementById(`title-${currentDay}-${index}`);
-                    const descInput = document.getElementById(`desc-${currentDay}-${index}`);
-                    if(titleInput) item.title = titleInput.value;
-                    if(descInput) item.desc = descInput.value;
-                });
-                document.getElementById('editBtn').innerText = "✏️ 開啟編輯模式";
-                document.getElementById('editBtn').className = "bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg text-sm font-medium transition backdrop-blur-sm border border-white/30";
-            } else {
-                document.getElementById('editBtn').innerText = "💾 儲存修改";
-                document.getElementById('editBtn').className = "bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition shadow";
-            }
-            isEditMode = !isEditMode;
-            renderItinerary();
-        }
-
-        function addItem(day) {
-            itineraryData[day].items.push({ time: "12:00", title: "新景點 / 餐廳", desc: "備註說明", query: "釜山" });
-            renderItinerary();
-        }
-
-        function deleteItem(day, index) {
-            itineraryData[day].items.splice(index, 1);
-            renderItinerary();
         }
 
         function showTaxiCard(korean, english) {
@@ -315,29 +211,6 @@
 
         function closeTaxiCard() {
             document.getElementById('taxiModal').classList.add('hidden');
-        }
-
-        function openShareModal() {
-            let text = "🇰🇷 2026 釜山五天四夜自由行行程表\n====================\n";
-            for(let d=1; d<=5; d++) {
-                text += `\n🔹 Day ${d}｜${itineraryData[d].title}\n`;
-                itineraryData[d].items.forEach(i => {
-                    text += `[${i.time}] ${i.title}${i.desc ? ' - ' + i.desc : ''}\n`;
-                });
-            }
-            document.getElementById('shareTextOutput').value = text;
-            document.getElementById('shareModal').classList.remove('hidden');
-        }
-
-        function closeShareModal() {
-            document.getElementById('shareModal').classList.add('hidden');
-        }
-
-        function copyShareText() {
-            const textarea = document.getElementById('shareTextOutput');
-            textarea.select();
-            document.execCommand('copy');
-            alert('已成功複製行程文字！可直接貼到 LINE 記事本與大家分享。');
         }
 
         // 初始化渲染
