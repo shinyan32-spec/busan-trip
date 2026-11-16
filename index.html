@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 釜山五天四夜自由行</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen">
+    <!-- 頂部標題與快捷字卡區 -->
+    <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-2xl font-bold flex items-center gap-2">
+                    <span>🇰🇷</span> 2026 釜山五天四夜自由行
+                </h1>
+                <p class="text-blue-100 text-sm mt-1">11/28 (六) － 12/02 (三)</p>
+            </div>
+            <!-- 頂部快捷字卡（含航班、住宿、收據） -->
+            <div class="flex flex-wrap items-center gap-1.5 justify-end">
+                <span class="text-xs text-blue-200 font-medium mr-1">🚖 快捷字卡：</span>
+                <button onclick="showTaxiCard('CI 190 去程航班', '11/28 (六) 台灣出發 ✈️ 釜山')" class="bg-white/20 hover:bg-white/30 text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition backdrop-blur-sm border border-white/30">
+                    ✈️ 去程 CI190
+                </button>
+                <button onclick="showTaxiCard('CI 187 回程航班', '12/02 (三) 19:50 釜山起飛 ✈️ 台灣')" class="bg-white/20 hover:bg-white/30 text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition backdrop-blur-sm border border-white/30">
+                    ✈️ 回程 CI187
+                </button>
+                <button onclick="showTaxiCard('브라운도트 비즈니스 서면점', 'Browndot Business Seomyeon (西面)')" class="bg-white/20 hover:bg-white/30 text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition backdrop-blur-sm border border-white/30">
+                    🏨 西面住宿
+                </button>
+                <button onclick="showTaxiCard('엘모멘토 광안', 'Elmomento Gwangalli (廣安里)')" class="bg-white/20 hover:bg-white/30 text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition backdrop-blur-sm border border-white/30">
+                    🏨 廣安住宿
+                </button>
+                <button onclick="showTaxiCard('영수증 주세요', 'Yeongsujeung juseyo (請給我收據)')" class="bg-amber-400 hover:bg-amber-500 text-slate-900 px-2.5 py-1.5 rounded-lg text-xs font-bold transition shadow">
+                    🧾 請給我收據
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要內容區 -->
+    <main class="max-w-4xl mx-auto px-4 py-6 space-y-6">
+        <!-- 日期導航標籤 -->
+        <div class="flex overflow-x-auto gap-2 pb-2 scrollbar-none" id="dayTabs">
+            <button onclick="switchDay(1)" class="day-tab px-4 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap transition bg-blue-600 text-white shadow" data-day="1">Day 1 (11/28)</button>
+            <button onclick="switchDay(2)" class="day-tab px-4 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap transition bg-white text-slate-600 hover:bg-slate-100 shadow-sm border border-slate-100" data-day="2">Day 2 (11/29)</button>
+            <button onclick="switchDay(3)" class="day-tab px-4 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap transition bg-white text-slate-600 hover:bg-slate-100 shadow-sm border border-slate-100" data-day="3">Day 3 (11/30)</button>
+            <button onclick="switchDay(4)" class="day-tab px-4 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap transition bg-white text-slate-600 hover:bg-slate-100 shadow-sm border border-slate-100" data-day="4">Day 4 (12/01)</button>
+            <button onclick="switchDay(5)" class="day-tab px-4 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap transition bg-white text-slate-600 hover:bg-slate-100 shadow-sm border border-slate-100" data-day="5">Day 5 (12/02)</button>
+        </div>
+
+        <!-- 行程內容容器 -->
+        <div id="itineraryContent" class="space-y-4">
+            <!-- 內容由 JavaScript 動態載入 -->
+        </div>
+    </main>
+
+    <!-- 司機 / 資訊大字卡 Modal -->
+    <div id="taxiModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 text-center space-y-4 shadow-2xl">
+            <div class="text-xs uppercase font-bold tracking-wider text-indigo-600 bg-indigo-50 py-1 px-3 rounded-full inline-block">請向司機 / 服務人員出示此畫面</div>
+            <h3 id="taxiKorean" class="text-3xl font-black text-slate-900 tracking-tight py-4"></h3>
+            <p id="taxiEnglish" class="text-slate-500 text-sm"></p>
+            <button onclick="closeTaxiCard()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl transition">關閉</button>
+        </div>
+    </div>
+
+    <script>
+        // 行程資料結構
+        let itineraryData = {
+            1: {
+                title: "西面商圈 ＋ 樂天百貨",
+                focus: "採買美妝日用品、百貨精品巡禮、飯店 Check-in、烤肉與牛小腸宵夜",
+                items: [
+                    { time: "06:00", title: "台灣出發", desc: "預計上午抵達金海機場、前往西面", query: "金海國際機場" },
+                    { time: "10:30 - 11:30", title: "西面商圈", desc: "DAISO 大創、Olive Young", query: "서면 다이소" },
+                    { time: "11:30 - 12:30", title: "🍴 午餐：福雞屋", desc: "招牌水芹菜雞湯", query: "복닭집 서면" },
+                    { time: "13:30 - 16:30", title: "樂天百貨 釜山本店", desc: "AMI Paris、Matin Kim、服飾及美妝", query: "롯데백화점 부산본점" },
+                    { time: "16:30 - 17:30", title: "🏨 飯店 Check-in：Browndot Business Seomyeon", desc: "辦理入住、放置行李與戰利品", query: "브라운도트 비즈니스 서면" },
+                    { time: "17:30 - 18:00", title: "西面商圈自由逛街", desc: "地下街、田浦咖啡街周邊", query: "서면 지하상가" },
+                    { time: "18:00 - 19:30", title: "🍴 晚餐：83 獬豸", desc: "韓國烤肉名店（建議提前抽號碼牌）", query: "83해치 서면" },
+                    { time: "19:30 - 21:30", title: "西面商圈自由活動", desc: "", query: "서면" },
+                    { time: "21:30 - 23:00", title: "🍴 宵夜：青春牛小腸 (청춘소곱창)", desc: "備選：서면곱（西面牛小腸）", query: "청춘소곱창 서면" }
+                ]
+            },
+            2: {
+                title: "札嘎其、南浦洞、國際市場、影島",
+                focus: "海鮮市場早市、南浦洞逛街採買、韓國棉被（京信寢具）、影島一隻雞",
+                items: [
+                    { time: "08:00 - 09:00", title: "早餐、出發", desc: "搭地鐵前往南浦 / 札嘎其站", query: "자갈치역" },
+                    { time: "09:00 - 10:30", title: "札嘎其市場", desc: "逛海鮮早市", query: "자갈치시장" },
+                    { time: "10:30 - 11:40", title: "BIFF 廣場 ＆ 京信寢具探路", desc: "必吃：黑糖餅、魚板（可先去京信看款式）", query: "BIFF광장" },
+                    { time: "12:00 - 13:00", title: "🍴 午餐：札嘎其或南浦洞周邊", desc: "視當天想吃的東西現場決定", query: "남포동 맛집" },
+                    { time: "13:00 - 15:30", title: "南浦洞、光復路商圈", desc: "EPT、GRAIN DE BEAUTE、大創、服飾美妝", query: "광복로 문화패션거리" },
+                    { time: "15:30 - 16:00", title: "國際市場逛街", desc: "", query: "국제시장" },
+                    { time: "16:00 - 16:30", title: "回「京信寢具」挑選及購買", desc: "預留付款與打包時間（務必 17:00 前完成）", query: "경신이불" },
+                    { time: "16:30 - 17:30", title: "前往影島", desc: "建議搭計程車或公車過橋", query: "영도" },
+                    { time: "18:00 - 19:30", title: "🍴 晚餐：明星一隻雞 (명성닭한마리)", desc: "", query: "명성닭한마리" },
+                    { time: "19:30 之後", title: "返回西面住宿", desc: "放戰利品、休息", query: "브라운도트 비즈니스 서면" }
+                ]
+            },
+            3: {
+                title: "新世界百貨、天空膠囊、海雲台",
+                focus: "換宿至廣安里、新世界百貨快閃、海岸天空膠囊列車、海雲台商圈",
+                items: [
+                    { time: "09:00 - 09:30", title: "西面住宿退房", desc: "整理行李", query: "" },
+                    { time: "09:30 - 10:15", title: "前往廣安里住宿寄放行李", desc: "埃爾陌門托廣安公寓式飯店", query: "엘모멘토 광안" },
+                    { time: "10:15 - 10:30", title: "前往新世界百貨 Centum City", desc: "全球最大百貨公司", query: "신세계백화점 센텀시티점" },
+                    { time: "10:30 - 11:35", title: "新世界百貨逛街", desc: "Bath & Body Works、Mardi Mercredi", query: "신세계백화점 센텀시티점" },
+                    { time: "11:35 - 12:20", title: "⚠️ 11:35 準時離開 → 前往尾浦站", desc: "需預留充足交通時間前往海雲台尾浦站 (Mipo)", query: "미포정거장" },
+                    { time: "12:20 - 13:00", title: "尾浦站報到、排隊", desc: "13:00 準時搭乘天空膠囊（尾浦 → 青沙浦）", query: "블루라인파크 미포정거장" },
+                    { time: "14:00 - 15:00", title: "🍴 午餐：Gangho 강호", desc: "青沙浦周邊（招牌炸醬麵）", query: "청사포 강호" },
+                    { time: "15:00 - 16:30", title: "海雲台商圈", desc: "HETRAS 香氛、Olive Young", query: "해운대해수욕장" },
+                    { time: "16:30 - 17:30", title: "海雲台周邊自由活動", desc: "海雲台海水浴場散步、傳統市場", query: "해운대시장" },
+                    { time: "18:00 - 19:30", title: "🍴 晚餐：水邊最高豬肉湯飯", desc: "釜山必吃豬肉湯飯", query: "수변최고돼지국밥" },
+                    { time: "19:30 之後", title: "返回廣安里住宿", desc: "辦理入住", query: "엘모멘토 광안" }
+                ]
+            },
+            4: {
+                title: "機張、斜坡滑車、樂天世界、廣安里",
+                focus: "機張雙樂園（斜坡滑車＋樂天世界）、廣安里大啖帝王蟹與大橋夜景",
+                items: [
+                    { time: "08:00 - 10:30", title: "早餐、前往機張（含交通時間）", desc: "路程較遠，建議搭東海線電鐵或計程車", query: "기장" },
+                    { time: "10:30 - 12:00", title: "Skyline Luge 斜坡滑車", desc: "建議買 2～3 趟券比較過癮", query: "스카이라인 루지 부산" },
+                    { time: "12:00 - 12:30", title: "前往樂天世界", desc: "就在斜坡滑車對面", query: "롯데월드 어드벤처 부산" },
+                    { time: "12:30 - 16:00", title: "釜山樂天世界", desc: "遊樂設施、租借校服/園區拍照", query: "롯데월드 어드벤처 부산" },
+                    { time: "16:00 - 17:30", title: "返回廣安里", desc: "", query: "광안리해수욕장" },
+                    { time: "18:00 - 19:30", title: "🍴 晚餐：成元亭羊大腸", desc: "", query: "성원정양대창" },
+                    { time: "19:30 - 21:00", title: "🍴 續攤：大蟹俱樂部", desc: "帝王蟹 / 松葉蟹大餐", query: "대게클럽" },
+                    { time: "21:00 之後", title: "廣安里海水浴場、廣安大橋夜景", desc: "散步消食、看大橋燈光秀", query: "광안대교 야경" }
+                ]
+            },
+            5: {
+                title: "廣安里、返台",
+                focus: "廣安里海景咖啡廳放空、最後補貨、前往金海機場",
+                items: [
+                    { time: "08:30 - 09:30", title: "早餐", desc: "", query: "" },
+                    { time: "09:30 - 11:00", title: "廣安里海水浴場散步、拍照", desc: "白天的廣安大橋海景", query: "광안리해수욕장" },
+                    { time: "11:00 - 12:00", title: "廣安里海景咖啡廳", desc: "挑一間面海咖啡廳放空", query: "광안리 오션뷰 카페" },
+                    { time: "12:00 - 13:30", title: "🍴 午餐", desc: "廣安里周邊自由挑選", query: "광안리 맛집" },
+                    { time: "13:30 - 15:00", title: "廣安里最後採買、自由活動", desc: "補齊伴手禮與零食", query: "광안리" },
+                    { time: "15:00 - 15:30", title: "回住宿拿行李、最後整理", desc: "確認護照、退稅單據、液體托運", query: "엘모멘토 광안" },
+                    { time: "16:00", title: "⚠️ 準時從廣安里出發前往金海機場", desc: "預留車程約 50～60 分鐘", query: "김해국제공항" },
+                    { time: "16:50 - 17:00", title: "抵達金海機場", desc: "辦理登機、行李托運、機場退稅", query: "김해국제공항" },
+                    { time: "19:50", title: "搭機返台", desc: "結束愉快的釜山之旅！", query: "" }
+                ]
+            }
+        };
+
+        let currentDay = 1;
+
+        function switchDay(day) {
+            currentDay = day;
+            document.querySelectorAll('.day-tab').forEach(btn => {
+                if(parseInt(btn.dataset.day) === day) {
+                    btn.className = "day-tab px-4 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap transition bg-blue-600 text-white shadow";
+                } else {
+                    btn.className = "day-tab px-4 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap transition bg-white text-slate-600 hover:bg-slate-100 shadow-sm border border-slate-100";
+                }
+            });
+            renderItinerary();
+        }
+
+        function renderItinerary() {
+            const container = document.getElementById('itineraryContent');
+            const data = itineraryData[currentDay];
+            
+            let html = `
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                    <div class="border-b border-slate-100 pb-4 mb-6">
+                        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                            <span>📅 Day ${currentDay}</span>｜${data.title}
+                        </h2>
+                        <p class="text-sm text-slate-500 mt-1">📌 本日重點：${data.focus}</p>
+                    </div>
+                    <div class="space-y-4">
+            `;
+
+            data.items.forEach((item) => {
+                html += `
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between bg-slate-50 hover:bg-slate-100/70 p-4 rounded-xl transition gap-3 border border-slate-100/80">
+                        <div class="w-full md:w-auto">
+                            <span class="inline-block bg-blue-50 text-blue-700 font-bold text-xs px-2.5 py-1 rounded-lg mb-1">${item.time}</span>
+                            <h3 class="font-bold text-slate-800 text-sm">${item.title}</h3>
+                            ${item.desc ? `<p class="text-xs text-slate-500 mt-0.5">${item.desc}</p>` : ''}
+                        </div>
+                        <div class="flex items-center gap-2 self-end md:self-center">
+                            ${item.query ? `
+                                <a href="https://map.naver.com/v5/search/${encodeURIComponent(item.query)}" target="_blank" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold text-xs px-3 py-2 rounded-lg transition flex items-center gap-1 shadow-sm">
+                                    <span>📍</span> Naver 地圖
+                                </a>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</div></div>`;
+            container.innerHTML = html;
+        }
+
+        function showTaxiCard(korean, english) {
+            document.getElementById('taxiKorean').innerText = korean;
+            document.getElementById('taxiEnglish').innerText = english;
+            document.getElementById('taxiModal').classList.remove('hidden');
+        }
+
+        function closeTaxiCard() {
+            document.getElementById('taxiModal').classList.add('hidden');
+        }
+
+        // 初始化渲染
+        renderItinerary();
+    </script>
+</body>
+</html>
